@@ -24,6 +24,7 @@ Feature: sample karate test script
     Then print response.data
 
 
+
   Scenario: Get User
     Given path 'nesringurr2'
     When method get
