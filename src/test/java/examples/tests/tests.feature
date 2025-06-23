@@ -10,7 +10,7 @@ Feature: sample karate test script
 {
   "id": 32145685224,
   "username": "nesringurr2",
-  "firstName": "serkan2olmadı",
+  "firstName": "serkan2",
   "lastName": "gür2",
   "email": "denemeSerkan2@gmail.com",
   "password": "Deneme-2",
@@ -23,13 +23,107 @@ Feature: sample karate test script
     And status 200
     Then print response.data
 
-
+  Scenario: Creating a user with special characters in the username
+    * def myBody =
+    """
+{
+  "id": $$$$$$$,
+  "username": "$$$$$$$",
+  "firstName": "$$$$$$$",
+  "lastName": "$$$$$$",
+  "email": "$$$$$$$@gmail.com",
+  "password": "$$$$$$$$",
+  "phone": "$$$$$$$$$",
+  "userStatus": $
+}
+    """
+    Given request myBody
+    When method post
+    And status 404
+    Then print response.data
 
   Scenario: Get User
     Given path 'nesringurr2'
     When method get
     Then status 200
     * print response.data
+
+
+  Scenario: Creating a user with an empty username
+    * def myBody =
+    """
+{
+  "id": 321456852547,
+  "username": "",
+  "firstName": "serkan2",
+  "lastName": "gür2",
+  "email": "denemeSerkan2@gmail.com",
+  "password": "Deneme-2",
+  "phone": "5555555227",
+  "userStatus": 1
+}
+    """
+    Given request myBody
+    When method post
+    And status 404
+    Then print response.data
+
+  Scenario: Creating a user with an empty id
+    * def myBody =
+    """
+{
+  "id":,
+  "username": "serkangur002",
+  "firstName": "serkan2",
+  "lastName": "gür2",
+  "email": "denemeSerkan2@gmail.com",
+  "password": "Deneme-2",
+  "phone": "5555555227",
+  "userStatus": 1
+}
+    """
+    Given request myBody
+    When method post
+    And status 404
+    Then print response.data
+
+  Scenario: Creating a user with an empty lastname
+    * def myBody =
+    """
+{
+  "id": 321456852547,
+  "username": "serkangur002",
+  "firstName": "serkan2",
+  "lastName": "",
+  "email": "denemeSerkan2@gmail.com",
+  "password": "Deneme-2",
+  "phone": "5555555227",
+  "userStatus": 1
+}
+    """
+    Given request myBody
+    When method post
+    And status 404
+    Then print response.data
+
+  Scenario: Creating a user with an empty e-mail
+    * def myBody =
+    """
+{
+  "id": 321456852547,
+  "username": "serkangur002",
+  "firstName": "serkan2olmadı",
+  "lastName": "gür2",
+  "email": "",
+  "password": "Deneme-2",
+  "phone": "5555555227",
+  "userStatus": 1
+}
+    """
+    Given request myBody
+    When method post
+    And status 404
+    Then print response.data
 
 
   Scenario: Update User
@@ -58,6 +152,46 @@ Feature: sample karate test script
     And param password = 'deneme-1'
     When method get
     Then status 200
+    Then print response.data
+
+  Scenario: Login with an incorrect username
+    Given path 'login'
+    And param username = 'serkangur1902'
+    And param password = 'deneme-1'
+    When method get
+    Then status 404
+    Then print response.data
+
+  Scenario: Login with an incorrect password
+    Given path 'login'
+    And param username = 'serkanguryeni'
+    And param password = 'deneme-002'
+    When method get
+    Then status 404
+    Then print response.data
+
+  Scenario: Login with an empty username
+    Given path 'login'
+    And param username = ''
+    And param password = 'deneme-1'
+    When method get
+    Then status 404
+    Then print response.data
+
+  Scenario: Login with an empty password
+    Given path 'login'
+    And param username = 'serkanguryeni'
+    And param password = ''
+    When method get
+    Then status 404
+    Then print response.data
+
+  Scenario: Login with an empty username and password
+    Given path 'login'
+    And param username = ''
+    And param password = ''
+    When method get
+    Then status 404
     Then print response.data
 
 
@@ -110,6 +244,12 @@ Feature: sample karate test script
     Given path 'serkangurdeneme'
     When method delete
     Then status 200
+
+
+  Scenario: Deleting a non-existent user
+    Given path 'sdfdgfgfhgfh'
+    When method delete
+    Then status 404
 
 
 
